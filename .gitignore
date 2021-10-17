@@ -1,0 +1,11 @@
+#Archivos compilados
+*.class
+
+#Archivos temporales de Maven
+/**/target/
+
+#Archivos de Intellij
+*.inl
+/.idea
+
+
