@@ -1,13 +1,23 @@
 package co.edu.uniquindio.proyecto.entidades;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Map;
 
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class Persona implements Serializable {
 
     @Id
+    @EqualsAndHashCode.Include
     private String cedula;
     private String nombre;
     private String email;
@@ -18,9 +28,6 @@ public class Persona implements Serializable {
     @Enumerated(EnumType.STRING)
     private GeneroPersona genero;
 
-    public Persona (){
-        super();
-    }
 
     public Persona(String cedula, String nombre, String email, GeneroPersona genero) {
         this.cedula = cedula;
@@ -29,58 +36,4 @@ public class Persona implements Serializable {
         this.genero = genero;
     }
 
-    public String getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Map<String, String> getNumTelefono() {
-        return numTelefono;
-    }
-
-    public void setNumTelefono(Map<String, String> numTelefono) {
-        this.numTelefono = numTelefono;
-    }
-
-    public GeneroPersona getGenero() {
-        return genero;
-    }
-
-    public void setGenero(GeneroPersona genero) {
-        this.genero = genero;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Persona persona = (Persona) o;
-
-        return cedula != null ? cedula.equals(persona.cedula) : persona.cedula == null;
-    }
-
-    @Override
-    public int hashCode() {
-        return cedula != null ? cedula.hashCode() : 0;
-    }
 }
