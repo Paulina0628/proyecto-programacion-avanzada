@@ -6,34 +6,33 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
-import java.util.Map;
+import java.time.LocalDate;
 
-@Entity
+
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 public class Persona implements Serializable {
 
     @Id
     @EqualsAndHashCode.Include
-    private String cedula;
-    private String nombre;
-    private String email;
+    @Column(length = 10)
+    private String codigo;
 
-    @ElementCollection
-    private Map<String, String> numTelefono;
+    @Column(nullable = false, length = 50)
+    private String nombre;
+
+    @Column(nullable = false)
+    @Positive
+    private LocalDate fechaNacimiento;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private GeneroPersona genero;
-
-
-    public Persona(String cedula, String nombre, String email, GeneroPersona genero) {
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.email = email;
-        this.genero = genero;
-    }
 
 }

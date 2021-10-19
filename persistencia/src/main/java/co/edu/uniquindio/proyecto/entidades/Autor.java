@@ -4,32 +4,20 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.w3c.dom.stylesheets.LinkStyle;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
-public class Autor implements Serializable {
+public class Autor extends Persona implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Integer codigo;
+    @ManyToMany(mappedBy = "autoresLibro")
+    private List<Libro> librosEscritos;
 
-    private String nombre;
-    private Integer anioNacimiento;
-
-
-    public Autor(String nombre, Integer anioNacimiento) {
-        this.nombre = nombre;
-        this.anioNacimiento = anioNacimiento;
-    }
 }

@@ -5,11 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Getter
@@ -23,6 +21,9 @@ public class Ciudad implements Serializable {
     @EqualsAndHashCode.Include
     private Integer codigo;
 
+    @Column(length = 100, nullable = false)
     private String nombre;
 
+    @OneToMany(mappedBy = "ciudad")
+    private List<Usuario> usuarios;
 }
