@@ -10,10 +10,13 @@
         <module name="persistencia" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="proyecto-programacion-avanzada" target="11" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="persistencia" options="-parameters" />
+      <module name="persistencia" options="-parameters --add-modules java.base" />
     </option>
   </component>
 </project>
