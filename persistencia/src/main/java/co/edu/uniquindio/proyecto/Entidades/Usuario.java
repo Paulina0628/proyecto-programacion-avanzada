@@ -52,7 +52,7 @@ public class Usuario extends Persona implements Serializable {
 
     @ElementCollection
     @Column(name = "telefono" ,nullable = false)
-    private Map<Integer, String> telefonos;
+    private Map<String, String> telefonos;
 
     public Usuario(String nombre, String email, String contrasenia) {
         super(nombre, email, contrasenia);
