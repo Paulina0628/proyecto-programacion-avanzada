@@ -34,4 +34,10 @@ public class Subasta implements Serializable {
     public Subasta(String fechaLimite) {
         this.fechaLimite = fechaLimite;
     }
+
+    public Subasta(Integer codigo, Producto productoSubasta, String fechaLimite) {
+        this.codigo = codigo;
+        this.productoSubasta = productoSubasta;
+        this.fechaLimite = fechaLimite;
+    }
 }

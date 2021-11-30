@@ -1,7 +1,9 @@
 package co.edu.uniquindio.proyecto.test;
 
+import co.edu.uniquindio.proyecto.Entidades.Ciudad;
 import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.Repositorios.CiudadRepositorio;
+import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,81 +24,80 @@ public class UsuarioTest {
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
+    @Autowired
+    private CiudadRepositorio ciudadRepositorio;
+
     @Test
+    @Sql("classpath:usuarios.sql")
     public void registrarUsuarioTest() {
 
-        // Creamos el usuario
-        Usuario usuario = crearUsuarioPrueba();
+        // Hallamos la ciudad
+        Ciudad ciudad = ciudadRepositorio.findById(1).orElse(null);
 
-        // Guardamos el dato del usuario
-        Usuario resultado = usuarioRepositorio.save(usuario);
+        // Creamos el hash map de telefonos
+        Map<String, String> telefonos = new HashMap<>();
 
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(resultado);
+        // Le insertamos valores al hash map
+        telefonos.put("casa", "123123");
+        telefonos.put("celular", "3112322334");
 
-    }
+        // Creamos el nuevo usuario
+        Usuario usuario = new Usuario(1234, "Dahiana", "dahiana@gmail.com", "dahianita123", ciudad, telefonos);
 
-    @Test
-    public void editarUsuarioTest() {
+        // Guardamos el usuario creado
+        Usuario usuarioGuardado = usuarioRepositorio.save(usuario);
 
-        // Creamos el usuario
-        Usuario usuario = crearUsuarioPrueba();
-        int usuarioId = usuarioRepositorio.save(usuario).getCodigo();
-
-        // Buscamos el usuario
-        Usuario usuarioBuscado = usuarioRepositorio.findById(usuarioId).orElse(null);
-        Assertions.assertNotNull(usuarioBuscado);
-
-        // Modificamos datos
-        usuarioBuscado.setEmail("pepito2000@email.com");
-
-        // Guardamos datos
-        Usuario usuarioEditado = usuarioRepositorio.save(usuarioBuscado);
-
-        // Validamos datos
-        Assertions.assertNotNull(usuarioEditado);
+        // Validamos que se haya guardado con exito el usuario creado
+        Assertions.assertNotNull(usuarioGuardado);
 
     }
 
     @Test
-    public void eliminarUsuario() {
+    @Sql("classpath:usuarios.sql")
+    public void eliminar(){
 
-        // Creamos el usuario
-        Usuario usuario = crearUsuarioPrueba();
-        int usuarioId = usuarioRepositorio.save(usuario).getCodigo();
+        // Borramos el usuario por su id
+        usuarioRepositorio.deleteById(1231);
 
-        // Buscamos el usuario
-        Usuario usuarioBuscado = usuarioRepositorio.findById(usuarioId).orElse(null);
-        Assertions.assertNotNull(usuarioBuscado);
+        // Buscamos el usuario para validar si se ha eliminado
+        Usuario usuarioBuscado = usuarioRepositorio.findById(1231).orElse(null);
 
-        // Eliminamos el usuario
-        usuarioRepositorio.delete(usuarioBuscado);
+        // Validamos si se ha eliminado
+        Assertions.assertNull(usuarioBuscado);
 
-        // Verificamos datos
-        Usuario busquedaNueva = usuarioRepositorio.findById(usuarioId).orElse(null);
-        Assertions.assertNull(busquedaNueva);
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void actualizar(){
+
+        // Buscamos el usuario guardado que se desea modificar
+        Usuario usuarioGuardado = usuarioRepositorio.findById(1232).orElse(null);
+
+        // Le cambiamos el email
+        usuarioGuardado.setEmail("maria123@gmail.com");
+
+        // Guardamos el usuario con los cambios hechos
+        usuarioRepositorio.save(usuarioGuardado);
+
+        // Ahora, buscamos el usuario para validar el cambio correcto del email
+        Usuario usuarioBuscado = usuarioRepositorio.findById(1232).orElse(null);
+
+        // Validamos que se haya hecho correctamente el cambio
+        Assertions.assertEquals("maria123@gmail.com", usuarioBuscado.getEmail());
+
     }
 
     @Test
     @Sql("classpath:usuarios.sql")
     public void listarUsuariosTest() {
-        List<Usuario> lista = usuarioRepositorio.findAll();
-        System.out.println(lista);
+
+        // Conseguimos todos los usuarios
+        List<Usuario> usuarios = usuarioRepositorio.findAll();
+
+        // y los imprimimos
+        usuarios.forEach(u -> System.out.println(u));
+        System.out.println(usuarios);
     }
 
-
-        private Usuario crearUsuarioPrueba() {
-        Usuario usuario = new Usuario();
-        usuario.setCodigo(1234);
-        usuario.setNombre("Pepito");
-        usuario.setEmail("pepito@email.com");
-        usuario.setContrasenia("pepito1234");
-
-        Map<String, String> usuario_telefono = new HashMap<>();
-        usuario_telefono.put("Casa", "311353");
-        usuario_telefono.put("Celular", "312034");
-        usuario.setTelefonos(usuario_telefono);
-
-        return usuario;
-    }
 }

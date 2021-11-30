@@ -60,6 +60,7 @@ public class Producto implements Serializable {
     private Integer unidades;
 
     private String descripcion;
+    private double descuento;
 
     @Column(nullable = false)
     private double precio;
@@ -67,7 +68,7 @@ public class Producto implements Serializable {
     @Column(name = "fecha_limite", nullable = false)
     private String fechaLimite;
 
-    private double descuento;
+
 
     public Producto(String nombre, Integer unidades, String descripcion, double precio, String fechaLimite, double descuento) {
         this.nombre = nombre;
@@ -76,5 +77,17 @@ public class Producto implements Serializable {
         this.precio = precio;
         this.fechaLimite = fechaLimite;
         this.descuento = descuento;
+    }
+
+    public Producto(Ciudad ciudad, Usuario vendedor, Integer codigo, String nombre, Integer unidades, String descripcion, double descuento, double precio, String fechaLimite) {
+        this.ciudad = ciudad;
+        this.vendedor = vendedor;
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.unidades = unidades;
+        this.descripcion = descripcion;
+        this.descuento = descuento;
+        this.precio = precio;
+        this.fechaLimite = fechaLimite;
     }
 }

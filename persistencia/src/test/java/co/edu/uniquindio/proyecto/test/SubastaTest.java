@@ -1,18 +1,19 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Producto;
-import co.edu.uniquindio.proyecto.Entidades.Subasta;
-import co.edu.uniquindio.proyecto.Entidades.SubastaUsuario;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.repositorios.ProductoRepositorio;
-import co.edu.uniquindio.proyecto.repositorios.SubastaRepositorio;
+import co.edu.uniquindio.proyecto.Entidades.*;
+import co.edu.uniquindio.proyecto.Repositorios.ProductoRepositorio;
+import co.edu.uniquindio.proyecto.Repositorios.SubastaRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class SubastaTest {
 
 
@@ -23,17 +24,14 @@ public class SubastaTest {
     private ProductoRepositorio productoRepositorio;
 
     @Test
+    @Sql("classpath:subasta.sql")
     public void registrarSubastaTest() {
 
-        // Creación de los datos previos
-        Producto producto = crearProductoPrueba();
-        Producto productoP = productoRepositorio.save(producto);
-
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(productoP);
+        //Hallamos el producto
+        Producto productoSubasta = productoRepositorio.findById(345).orElse(null);
 
         // Creamos la Subasta
-        Subasta subasta = crearSubastaPrueba(productoP);
+        Subasta subasta = new Subasta(9876, productoSubasta, "2021/04/23");
 
         // Guardamos el dato de la subasta
         Subasta resultado = subastaRepositorio.save(subasta);
@@ -44,85 +42,51 @@ public class SubastaTest {
     }
 
     @Test
-    public void editarSubastaTest() {
+    @Sql("classpath:subasta.sql")
+    public void eliminarSubastaTest() {
 
-        // Creación de los datos previos
-        Producto producto = crearProductoPrueba();
-        Producto productoP = productoRepositorio.save(producto);
+        // Borramos la subasta por su id
+        subastaRepositorio.deleteById(1111);
 
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(productoP);
+        // Buscamos para confirmar si se ha eliminado
+        Subasta subasta = subastaRepositorio.findById(1111).orElse(null);
 
-        // Creamos la Subasta
-        Subasta subasta = crearSubastaPrueba(productoP);
-        int subastaId = subastaRepositorio.save(subasta).getCodigo();
-
-        // Buscamos la subastaUsuario
-        Subasta busqueda = subastaRepositorio.findById(subastaId).orElse(null);
-        Assertions.assertNotNull(busqueda);
-
-        // Modificamos datos
-        busqueda.setFechaLimite("25/01/22");
-
-        // Guardamos datos
-        Subasta resultado = subastaRepositorio.save(busqueda);
+        // Validamos si se ha eliminado
+        Assertions.assertNull(subasta);
 
     }
 
     @Test
-    public void eliminarUsuario() {
+    @Sql("classpath:subasta.sql")
+    public void actualizarSubastaTest(){
 
-        // Creación de los datos previos
-        Producto producto = crearProductoPrueba();
-        Producto productoP = productoRepositorio.save(producto);
+        // Conseguimos la subasta guardada para actualzar
+        Subasta subastaGuardada = subastaRepositorio.findById(2222).orElse(null);
 
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(productoP);
+        // Actualizamos la fecha limite
+        subastaGuardada.setFechaLimite("2021/11/12");
 
-        // Creamos la Subasta
-        Subasta subasta = crearSubastaPrueba(productoP);
-        int subastaId = subastaRepositorio.save(subasta).getCodigo();
+        // Guardamos los cambios
+        subastaRepositorio.save(subastaGuardada);
 
-        // Buscamos la subastaUsuario
-        Subasta busqueda = subastaRepositorio.findById(subastaId).orElse(null);
-        Assertions.assertNotNull(busqueda);
+        // Buscamos la subasta para validar los cambios
+        Subasta subastaBuscada = subastaRepositorio.findById(2222).orElse(null);
 
-        // Eliminemos el usuario
-        subastaRepositorio.delete(busqueda);
-
-        // Guardamos datos
-        Subasta busquedaNueva = subastaRepositorio.findById(subastaId).orElse(null);
-        Assertions.assertNull(busquedaNueva);
+        // Validamos los cambios
+        Assertions.assertEquals("2021/11/12", subastaBuscada.getFechaLimite());
 
     }
 
     @Test
     @Sql("classpath:subasta.sql")
     public void listarSubastaTest() {
+
+        // Conseguimos todas las subastas
         List<Subasta> lista = subastaRepositorio.findAll();
+
+        // Y se imprimen
+        lista.forEach(u -> System.out.println(u));
         System.out.println(lista);
-    }
-
-    private Subasta crearSubastaPrueba(Producto producto) {
-
-        Subasta subasta = new Subasta("02/01/2022");
-        subasta.setProductoSubasta(producto);
-
-        return subasta;
-    }
-
-    private Producto crearProductoPrueba() {
-
-        Producto producto = new Producto();
-        producto.setCodigo(10000);
-        producto.setNombre("producto1");
-        producto.setUnidades(20);
-        producto.setDescripcion("holaholahola");
-        producto.setPrecio(25000);
-        producto.setFechaLimite("31/12/2021");
-        producto.setDescuento(2300);
-
-        return producto;
     }
 
 }

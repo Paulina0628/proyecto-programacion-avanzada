@@ -33,4 +33,9 @@ public class Ciudad implements Serializable {
     public Ciudad(String nombre) {
         this.nombre = nombre;
     }
+
+    public Ciudad(Integer codigo, String nombre) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+    }
 }

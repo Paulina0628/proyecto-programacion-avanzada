@@ -35,7 +35,11 @@ public class SubastaUsuario implements Serializable {
     private String fechaSubasta;
 
 
-
-
-
+    public SubastaUsuario(Integer codigo, Subasta subasta, Usuario usuarioSubasta, double valor, String fechaSubasta) {
+        this.codigo = codigo;
+        this.subasta = subasta;
+        this.usuarioSubasta = usuarioSubasta;
+        this.valor = valor;
+        this.fechaSubasta = fechaSubasta;
+    }
 }

@@ -32,4 +32,9 @@ public class Chat implements Serializable {
     @JoinColumn(name = "codigo_producto")
     private Usuario productoChat;
 
+    public Chat(Integer codigo, Usuario chatUsuario, Usuario productoChat) {
+        this.codigo = codigo;
+        this.chatUsuario = chatUsuario;
+        this.productoChat = productoChat;
+    }
 }

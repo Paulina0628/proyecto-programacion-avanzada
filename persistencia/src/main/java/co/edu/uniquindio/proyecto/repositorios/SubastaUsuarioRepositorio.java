@@ -1,4 +1,4 @@
-package co.edu.uniquindio.proyecto.repositorios;
+package co.edu.uniquindio.proyecto.Repositorios;
 
 import co.edu.uniquindio.proyecto.Entidades.SubastaUsuario;
 import co.edu.uniquindio.proyecto.Entidades.Usuario;

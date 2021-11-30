@@ -1,11 +1,9 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Subasta;
-import co.edu.uniquindio.proyecto.Entidades.SubastaUsuario;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.repositorios.SubastaRepositorio;
-import co.edu.uniquindio.proyecto.repositorios.SubastaUsuarioRepositorio;
-import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.Entidades.*;
+import co.edu.uniquindio.proyecto.Repositorios.SubastaRepositorio;
+import co.edu.uniquindio.proyecto.Repositorios.SubastaUsuarioRepositorio;
+import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,136 +25,76 @@ public class SubataUsuarioTest {
     @Autowired
     private SubastaUsuarioRepositorio subastaUsuarioRepositorio;
 
-    // Tienes que usar lo que declaraste no irte a UsuarioRepositorio
     @Autowired
     private UsuarioRepositorio usuarioRepositorio;
 
     @Test
+    @Sql("classpath:subastaUsuario.sql")
     public void registrarSubastaUsuarioTest() {
 
-        // Creación de los datos previos
-        Subasta subasta = crearSubastaPrueba();
-        Subasta subastaS = subastaRepositorio.save(subasta);
-        Usuario usuario = crearUsuarioPrueba();
-        Usuario usuarioS = usuarioRepositorio.save(usuario);
+        // Hallamos el usuario por su id
+        Usuario usuario = usuarioRepositorio.findById(45321).orElse(null);
 
+        // Hallamos la subasta por su id
+        Subasta subasta = subastaRepositorio.findById(3333).orElse(null);
 
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(usuarioS);
-        Assertions.assertNotNull(subastaS);
+        // Creamos la subasta Usuario
+        SubastaUsuario subastaUsuario = new SubastaUsuario(777, subasta, usuario, 40000, "2021/08/10");
 
-        // Creamos la SubastaUsuario
-        SubastaUsuario subastaUsuario = crearsubastaUsuarioPrueba(usuarioS, subastaS);
+        // Se guarda la subasta Usuario creada
+        SubastaUsuario subastaUsuarioB = subastaUsuarioRepositorio.save(subastaUsuario);
 
-        // Guardamos el dato de la subastaUsuario
-        SubastaUsuario resultado = subastaUsuarioRepositorio.save(subastaUsuario);
-
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(resultado);
-
-    }
-
-    @Test
-    public void editarUsuario() {
-
-        // Creación de los datos previos
-        Subasta subasta = crearSubastaPrueba();
-        Subasta subastaS = subastaRepositorio.save(subasta);
-        Usuario usuario = crearUsuarioPrueba();
-        Usuario usuarioS = usuarioRepositorio.save(usuario);
-
-
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(usuarioS);
-        Assertions.assertNotNull(subastaS);
-
-        // Creamos la SubastaUsuario
-        SubastaUsuario subastaUsuario = crearsubastaUsuarioPrueba(usuarioS, subastaS);
-        int subastaUsuarioId = subastaUsuarioRepositorio.save(subastaUsuario).getCodigo();
-
-        // Buscamos la subastaUsuario
-        SubastaUsuario busqueda = subastaUsuarioRepositorio.findById(subastaUsuarioId).orElse(null);
-        Assertions.assertNotNull(busqueda);
-
-        // Modificamos datos
-        busqueda.setFechaSubasta("15/11/2021");
-
-        // Guardamos datos
-        SubastaUsuario resultado = subastaUsuarioRepositorio.save(busqueda);
-    }
-
-    @Test
-    public void eliminarUsuario() {
-
-        // Creación de los datos previos
-        Subasta subasta = crearSubastaPrueba();
-        Subasta subastaS = subastaRepositorio.save(subasta);
-        Usuario usuario = crearUsuarioPrueba();
-        Usuario usuarioS = usuarioRepositorio.save(usuario);
-
-
-        // Validamos que se haya guardado la información
-        Assertions.assertNotNull(usuarioS);
-        Assertions.assertNotNull(subastaS);
-
-        // Creamos la SubastaUsuario
-        SubastaUsuario subastaUsuario = crearsubastaUsuarioPrueba(usuarioS, subastaS);
-        int subastaUsuarioId = subastaUsuarioRepositorio.save(subastaUsuario).getCodigo();
-
-        // Buscamos el usuario
-        SubastaUsuario busqueda = subastaUsuarioRepositorio.findById(subastaUsuarioId).orElse(null);
-        Assertions.assertNotNull(busqueda);
-
-        // Eliminemos el usuario
-        subastaUsuarioRepositorio.delete(busqueda);
-
-        // Guardamos datos
-        SubastaUsuario busquedaNueva = subastaUsuarioRepositorio.findById(subastaUsuarioId).orElse(null);
-        Assertions.assertNull(busquedaNueva);
+        // Validamos que se haya guardado la subasta Usuario
+        Assertions.assertNotNull(subastaUsuarioB);
 
     }
 
     @Test
     @Sql("classpath:subastaUsuario.sql")
-    public void listarSubastaUsuariosTest() {
-        List<SubastaUsuario> lista = subastaUsuarioRepositorio.findAll();
-        System.out.println(lista);
-    }
+    public void eliminarTest(){
 
-    private SubastaUsuario crearsubastaUsuarioPrueba(Usuario usuario, Subasta subasta) {
+        // Eliminamos la Subasta Usuario por su id
+        subastaUsuarioRepositorio.deleteById(888);
 
-        SubastaUsuario subastaU = new SubastaUsuario();
-        subastaU.setCodigo(111);
-        subastaU.setValor(24000);
-        subastaU.setFechaSubasta("08/10/2021");
-        subastaU.setUsuarioSubasta(usuario);
-        subastaU.setSubasta(subasta);
+        // Lo buscamos para validar si la eliminación ha sido exitosa
+        SubastaUsuario subastaUsuarioB = subastaUsuarioRepositorio.findById(888).orElse(null);
 
-        return subastaU;
+        // Validamos si se ha eliminado
+        Assertions.assertNull(subastaUsuarioB);
 
     }
 
-    private Usuario crearUsuarioPrueba() {
-        Usuario usuario = new Usuario();
-        usuario.setCodigo(1234);
-        usuario.setNombre("Pepito");
-        usuario.setEmail("pepito@email.com");
-        usuario.setContrasenia("pepito1234");
+    @Test
+    @Sql("classpath:subastaUsuario.sql")
+    public void actualizarTest(){
 
-        Map<String, String> usuario_telefono = new HashMap<>();
-        usuario_telefono.put("Casa", "311353");
-        usuario_telefono.put("Celular", "312034");
-        usuario.setTelefonos(usuario_telefono);
+        // Conseguimos la subasta que se desea actualzar
+        SubastaUsuario subastaUsuarioGuardada = subastaUsuarioRepositorio.findById(999).orElse(null);
 
-        return usuario;
+        // Actualizamos la fecha
+        subastaUsuarioGuardada.setFechaSubasta("2022/04/12");
+
+        // Guardamos la subasta Usuario con los cambios realizados
+        subastaUsuarioRepositorio.save(subastaUsuarioGuardada);
+
+        // Buscamos la subasta Usuario para validar la modificación de su información
+        SubastaUsuario subastaUsuarioBuscado = subastaUsuarioRepositorio.findById(999).orElse(null);
+
+        // Validamos el cambio realizado
+        Assertions.assertEquals("2022/04/12", subastaUsuarioBuscado.getFechaSubasta());
+
     }
 
-    private Subasta crearSubastaPrueba() {
+    @Test
+    @Sql("classpath:subastaUsuario.sql")
+    public void listar(){
 
-        Subasta subasta = new Subasta();
-        subasta.setCodigo(100);
-        subasta.setFechaLimite("06/11/2021");
+        // Conseguimos todas las subastas Usuario
+        List<SubastaUsuario> subastasUsuario = subastaUsuarioRepositorio.findAll();
 
-        return subasta;
+        // Y se imprimen
+        subastasUsuario.forEach(u -> System.out.println(u));
+        System.out.println(subastasUsuario);
+
     }
 }

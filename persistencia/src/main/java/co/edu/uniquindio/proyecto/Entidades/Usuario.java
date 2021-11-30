@@ -1,10 +1,7 @@
 package co.edu.uniquindio.proyecto.Entidades;
 
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,12 +13,8 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(callSuper = true)
 public class Usuario extends Persona implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Integer codigo;
 
     @JoinTable(
             name = "favorito",
@@ -36,25 +29,44 @@ public class Usuario extends Persona implements Serializable {
     private Ciudad ciudadUsuario;
 
     @OneToMany(mappedBy = "compraUsuario")
+    @ToString.Exclude
     private List<Compra> compras;
 
     @OneToMany(mappedBy = "chatUsuario")
+    @ToString.Exclude
     private List<Chat> chats;
 
     @OneToMany(mappedBy = "vendedor")
+    @ToString.Exclude
     private List<Producto> productosVenta;
 
     @OneToMany(mappedBy = "usuario")
+    @ToString.Exclude
     private List<Comentario> comentarios;
 
     @OneToMany(mappedBy = "usuarioSubasta")
+    @ToString.Exclude
     private List<SubastaUsuario> usuarioSubastas;
 
     @ElementCollection
-    @Column(name = "telefono" ,nullable = false)
+    @Column(name = "telefono", nullable = false)
     private Map<String, String> telefonos;
 
-    public Usuario(String nombre, String email, String contrasenia) {
-        super(nombre, email, contrasenia);
+    public Usuario(Integer codigo, String nombre, String email, String contrasenia, List<Producto> productosFavoritos, Ciudad ciudadUsuario, List<Compra> compras, List<Chat> chats, List<Producto> productosVenta, List<Comentario> comentarios, List<SubastaUsuario> usuarioSubastas, Map<String, String> telefonos) {
+        super(codigo, nombre, email, contrasenia);
+        this.productosFavoritos = productosFavoritos;
+        this.ciudadUsuario = ciudadUsuario;
+        this.compras = compras;
+        this.chats = chats;
+        this.productosVenta = productosVenta;
+        this.comentarios = comentarios;
+        this.usuarioSubastas = usuarioSubastas;
+        this.telefonos = telefonos;
+    }
+
+    public Usuario(Integer codigo, String nombre, String email, String contrasenia, Ciudad ciudadUsuario, Map<String, String> telefonos) {
+        super(codigo, nombre, email, contrasenia);
+        this.ciudadUsuario = ciudadUsuario;
+        this.telefonos = telefonos;
     }
 }

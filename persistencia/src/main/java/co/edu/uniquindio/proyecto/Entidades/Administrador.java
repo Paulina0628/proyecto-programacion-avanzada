@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.Entidades;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,14 +13,10 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(callSuper = true)
 public class Administrador extends Persona implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include
-    private Integer codigo;
-
-    public Administrador(String nombre, String email, String contrasenia) {
-        super(nombre, email, contrasenia);
+    public Administrador(Integer codigo, String nombre, String email, String contrasenia) {
+        super(codigo, nombre, email, contrasenia);
     }
 }
