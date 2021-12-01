@@ -38,4 +38,12 @@ public class Mensaje implements Serializable {
         this.emisor = emisor;
         this.fecha = fecha;
     }
+
+    public Mensaje(Integer codigo, Chat chat, String mensaje, String emisor, String fecha) {
+        this.codigo = codigo;
+        this.chat = chat;
+        this.mensaje = mensaje;
+        this.emisor = emisor;
+        this.fecha = fecha;
+    }
 }

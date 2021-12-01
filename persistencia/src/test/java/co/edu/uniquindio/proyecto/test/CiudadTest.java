@@ -1,11 +1,7 @@
 package co.edu.uniquindio.proyecto.test;
 
 import co.edu.uniquindio.proyecto.Entidades.Ciudad;
-import co.edu.uniquindio.proyecto.Entidades.Producto;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
 import co.edu.uniquindio.proyecto.Repositorios.CiudadRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.ProductoRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

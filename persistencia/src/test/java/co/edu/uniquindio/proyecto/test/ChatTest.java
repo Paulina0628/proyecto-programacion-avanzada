@@ -1,8 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
 import co.edu.uniquindio.proyecto.Entidades.Chat;
-import co.edu.uniquindio.proyecto.Entidades.Ciudad;
-import co.edu.uniquindio.proyecto.Entidades.Producto;
 import co.edu.uniquindio.proyecto.Entidades.Usuario;
 import co.edu.uniquindio.proyecto.Repositorios.ChatRepositorio;
 import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;

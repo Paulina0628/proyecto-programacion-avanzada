@@ -38,4 +38,12 @@ public class DetalleCompra implements Serializable {
         this.unidades = unidades;
         this.precioProducto = precioProducto;
     }
+
+    public DetalleCompra(Integer codigo, Producto productoDetalleCompra, Compra compraDetalleCompra, Integer unidades, double precioProducto) {
+        this.codigo = codigo;
+        this.productoDetalleCompra = productoDetalleCompra;
+        this.compraDetalleCompra = compraDetalleCompra;
+        this.unidades = unidades;
+        this.precioProducto = precioProducto;
+    }
 }

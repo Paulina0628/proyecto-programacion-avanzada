@@ -38,4 +38,11 @@ public class Compra implements Serializable {
         this.fechaCompra = fechaCompra;
         this.metodoPago = metodoPago;
     }
+
+    public Compra(Integer codigo, Usuario compraUsuario, String fechaCompra, String metodoPago) {
+        this.codigo = codigo;
+        this.compraUsuario = compraUsuario;
+        this.fechaCompra = fechaCompra;
+        this.metodoPago = metodoPago;
+    }
 }

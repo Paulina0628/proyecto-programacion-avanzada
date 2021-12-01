@@ -46,4 +46,13 @@ public class Comentario implements Serializable {
         this.fechaComentario = fechaMensaje;
         this.calificacion = calificacion;
     }
+
+    public Comentario(Integer codigo, Producto productoComentado, String mensaje, String respuesta, String fechaComentario, double calificacion) {
+        this.codigo = codigo;
+        this.productoComentado = productoComentado;
+        this.mensaje = mensaje;
+        this.respuesta = respuesta;
+        this.fechaComentario = fechaComentario;
+        this.calificacion = calificacion;
+    }
 }
