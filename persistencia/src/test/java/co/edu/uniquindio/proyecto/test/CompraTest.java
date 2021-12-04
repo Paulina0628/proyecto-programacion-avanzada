@@ -1,9 +1,9 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Compra;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.Repositorios.CompraRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Compra;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.repositorios.CompraRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,4 +90,33 @@ public class CompraTest {
 
     }
 
+    @Test
+    @Sql("classpath:compras.sql")
+    public void listarPorUsuarioTest() {
+
+        //Buscamos el usuario de la compra
+        Usuario usuario = usuarioRepositorio.findById(23145).orElse(null);
+
+        List<Compra> lista = compraRepositorio.findAllByCompraUsuario(usuario);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:compras.sql")
+    public void listarPorFechaCompra() {
+
+        List<Compra> lista = compraRepositorio.findAllByFechaCompra("2021/05/10");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:compras.sql")
+    public void listarPorMetodoPago() {
+
+        List<Compra> lista = compraRepositorio.findAllByMetodoPago("Efectiva");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
 }

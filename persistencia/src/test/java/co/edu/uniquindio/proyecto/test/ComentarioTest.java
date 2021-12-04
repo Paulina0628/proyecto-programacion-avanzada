@@ -1,7 +1,7 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.*;
-import co.edu.uniquindio.proyecto.Repositorios.*;
+import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.repositorios.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -71,21 +72,45 @@ public class ComentarioTest {
         Comentario comentarioBuscado = comentarioRepositorio.findById(6662).orElse(null);
 
         // Validamos el cambio realizado
-        Assertions.assertEquals(5.0, comentarioBuscado.getCalificacion());
+        Assertions.assertEquals(comentarioBuscado.getCalificacion(), 5.0);
 
     }
 
     @Test
     @Sql("classpath:comentarios.sql")
     public void listar(){
-
         // Conseguimos todos los comentarios
         List<Comentario> comentarios = comentarioRepositorio.findAll();
-
-        // Y se imprimen
-        comentarios.forEach(u -> System.out.println(u));
-        System.out.println(comentarios);
-
+        Assertions.assertEquals(comentarios.size(), 3);
     }
 
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void listarPorCalificacionTest() {
+        List<Comentario> lista = comentarioRepositorio.findAllByCalificacion(3.5);
+        Assertions.assertEquals(lista.size(), 1);
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void listarPorFechaTest() {
+        List<Comentario> comentarios = comentarioRepositorio.findAllByFechaComentario("2021/09/10");
+        Assertions.assertEquals(comentarios.size(), 1);
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void listarProductoComentadoTest() {
+        Producto producto = productoRepositorio.findById(123).orElse(null);
+        Optional<Comentario> comentario = comentarioRepositorio.findByProductoComentado(producto);
+        Assertions.assertTrue(comentario.isPresent());
+    }
+
+    @Test
+    @Sql("classpath:comentarios.sql")
+    public void listarPorRangoCalificacion(){
+
+        List<Comentario> comentarios = comentarioRepositorio.listarComentariosEnRango(2.5,5.0);
+        Assertions.assertEquals(comentarios.size(), 3);
+    }
 }

@@ -1,11 +1,11 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Compra;
-import co.edu.uniquindio.proyecto.Entidades.DetalleCompra;
-import co.edu.uniquindio.proyecto.Entidades.Producto;
-import co.edu.uniquindio.proyecto.Repositorios.CompraRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.DetalleCompraRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.ProductoRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Compra;
+import co.edu.uniquindio.proyecto.entidades.DetalleCompra;
+import co.edu.uniquindio.proyecto.entidades.Producto;
+import co.edu.uniquindio.proyecto.repositorios.CompraRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.DetalleCompraRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.ProductoRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,4 +98,21 @@ public class DetalleCompraTest {
 
     }
 
+    @Test
+    @Sql("classpath:detallecompras.sql")
+    public void listarPorPrecioProducto() {
+
+        List<DetalleCompra> lista = detalleRepositorio.findAllByPrecioProducto(7000);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:detallecompras.sql")
+    public void listarPorUnidades() {
+
+        List<DetalleCompra> lista = detalleRepositorio.findAllByUnidades(5);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
 }

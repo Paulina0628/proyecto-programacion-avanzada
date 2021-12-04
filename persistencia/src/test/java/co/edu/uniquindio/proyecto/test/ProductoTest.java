@@ -1,11 +1,12 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Ciudad;
-import co.edu.uniquindio.proyecto.Entidades.Producto;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.Repositorios.CiudadRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.ProductoRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Ciudad;
+import co.edu.uniquindio.proyecto.entidades.Compra;
+import co.edu.uniquindio.proyecto.entidades.Producto;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.repositorios.CiudadRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.ProductoRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +99,46 @@ public class ProductoTest {
 
         }
 
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorPrecio() {
+
+        List<Producto> lista = productoRepositorio.findAllByPrecio(25000);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorNombre() {
+
+        List<Producto> lista = productoRepositorio.findAllByNombreContains("Producto1");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorVendedor() {
+
+        // Hallamos el vendedor por su id
+        Usuario vendedor = usuarioRepositorio.findById(45321).orElse(null);
+
+        List<Producto> lista = productoRepositorio.findAllByVendedor(vendedor);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarPorVendedor() {
+
+        // Hallamos la ciudad por su id
+        Ciudad ciudad = ciudadRepositorio.findById(4).orElse(null);
+
+        List<Producto> lista = productoRepositorio.findAllByCiudad(ciudad);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
 
     }

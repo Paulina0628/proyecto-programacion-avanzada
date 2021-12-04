@@ -1,9 +1,9 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.*;
-import co.edu.uniquindio.proyecto.Repositorios.SubastaRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.SubastaUsuarioRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.repositorios.SubastaRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.SubastaUsuarioRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +94,36 @@ public class SubataUsuarioTest {
         // Y se imprimen
         subastasUsuario.forEach(u -> System.out.println(u));
         System.out.println(subastasUsuario);
+
+    }
+
+    @Test
+    @Sql("classpath:subastaUsuario.sql")
+    public void listarPorUsuario() {
+
+        // Hallamos el usuario por su id
+        Usuario usuario = usuarioRepositorio.findById(45321).orElse(null);
+
+        List<SubastaUsuario> lista = subastaUsuarioRepositorio.findAllByUsuarioSubasta(usuario);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:subastaUsuario.sql")
+    public void listarPorValor() {
+
+        List<SubastaUsuario> lista = subastaUsuarioRepositorio.findAllByValor(25000);
+        Assertions.assertEquals(lista.size(), 2);
+
+    }
+
+    @Test
+    @Sql("classpath:subastaUsuario.sql")
+    public void listarPorFecha() {
+
+        List<SubastaUsuario> lista = subastaUsuarioRepositorio.findAllByFechaSubasta("2022/02/14");
+        Assertions.assertEquals(lista.size(), 1);
 
     }
 }

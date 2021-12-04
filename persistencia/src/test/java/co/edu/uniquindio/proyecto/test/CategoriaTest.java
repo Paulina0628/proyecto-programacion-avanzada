@@ -1,7 +1,8 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Categoria;
-import co.edu.uniquindio.proyecto.Repositorios.CategoriaRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Categoria;
+import co.edu.uniquindio.proyecto.repositorios.CategoriaRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -80,5 +82,25 @@ public class CategoriaTest {
         categorias.forEach(u -> System.out.println(u));
         System.out.println(categorias);
 
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarPorNombreTest() {
+        List<Categoria> lista = categoriaRepositorio.findAllByNombreContains("Terror");
+        lista.forEach(categoria -> System.out.println(categoria));
+
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarPorEmailTest() {
+        Optional<Categoria> categoria = categoriaRepositorio.findByCodigo(5551);
+
+        if(categoria.isPresent()){
+            System.out.println(categoria.get());
+        }else {
+            System.out.println("No existe alguna categoría con ese código");
+        }
     }
 }

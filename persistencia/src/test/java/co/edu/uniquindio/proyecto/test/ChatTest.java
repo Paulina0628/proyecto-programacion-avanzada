@@ -1,9 +1,9 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Chat;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.Repositorios.ChatRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Chat;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.repositorios.ChatRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +92,7 @@ public class ChatTest {
         System.out.println(chats);
 
     }
+
+
 
 }

@@ -1,7 +1,8 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Ciudad;
-import co.edu.uniquindio.proyecto.Repositorios.CiudadRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Ciudad;
+import co.edu.uniquindio.proyecto.repositorios.CiudadRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,14 @@ public class CiudadTest {
         // Y se imprimen
         ciudades.forEach(u -> System.out.println(u));
         System.out.println(ciudades);
+
+    }
+
+    @Test
+    @Sql("classpath:ciudades.sql")
+    public void listarPorNombreTest() {
+        List<Ciudad> lista = ciudadRepositorio.findAllByNombreContains("Armenia");
+        lista.forEach(ciudad -> System.out.println(ciudad));
 
     }
 

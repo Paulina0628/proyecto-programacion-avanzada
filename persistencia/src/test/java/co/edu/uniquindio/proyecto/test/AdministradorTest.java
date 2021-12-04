@@ -1,7 +1,8 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Administrador;
-import co.edu.uniquindio.proyecto.Repositorios.AdministradorRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Administrador;
+import co.edu.uniquindio.proyecto.repositorios.AdministradorRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -80,6 +82,26 @@ public class AdministradorTest {
         administradores.forEach(u -> System.out.println(u));
         System.out.println(administradores);
 
+    }
+
+    @Test
+    @Sql("classpath:administradores.sql")
+    public void listarPorNombreTest() {
+        List<Administrador> lista = administradorRepositorio.findAllByNombreContains("Pepe");
+        lista.forEach(administrador -> System.out.println(administrador));
+
+    }
+
+    @Test
+    @Sql("classpath:administradores.sql")
+    public void listarPorEmailTest() {
+        Optional<Administrador> administrador = administradorRepositorio.findByEmail("admin2@email.com");
+
+        if(administrador.isPresent()){
+            System.out.println(administrador.get());
+        }else {
+            System.out.println("No existe algún administrador con ese correo");
+        }
     }
 
 }

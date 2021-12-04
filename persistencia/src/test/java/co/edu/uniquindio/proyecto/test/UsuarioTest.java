@@ -1,19 +1,25 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Ciudad;
-import co.edu.uniquindio.proyecto.Entidades.Usuario;
-import co.edu.uniquindio.proyecto.Repositorios.CiudadRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.UsuarioRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Ciudad;
+import co.edu.uniquindio.proyecto.entidades.Usuario;
+import co.edu.uniquindio.proyecto.repositorios.CiudadRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -96,6 +102,49 @@ public class UsuarioTest {
         // y los imprimimos
         usuarios.forEach(u -> System.out.println(u));
         System.out.println(usuarios);
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarPorNombreTest() {
+        List<Usuario> lista = usuarioRepositorio.findAllByNombreContains("maria");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarPorEmailTest() {
+        Optional<Usuario> usuario = usuarioRepositorio.findByEmail("maria@email.com");
+        Assertions.assertTrue(usuario.isPresent());
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarPorEmailAndContraseniaTest() {
+        Optional<Usuario> usuario = usuarioRepositorio.findByEmailAndContrasenia("felipe@email.com", "felipe1234");
+        Assertions.assertTrue(usuario.isPresent());
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void paginarListaTest() {
+
+        Pageable paginador = PageRequest.of(0,2);
+
+        Page<Usuario> lista = usuarioRepositorio.findAll(paginador);
+        System.out.println(lista.stream().collect(Collectors.toList()));
+
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void ordenarListaTest() {
+
+
+        List<Usuario> lista = usuarioRepositorio.findAll(Sort.by("nombre"));
+        System.out.println(lista.stream().collect(Collectors.toList()));
+
     }
 
 }

@@ -1,8 +1,8 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.*;
-import co.edu.uniquindio.proyecto.Repositorios.ProductoRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.SubastaRepositorio;
+import co.edu.uniquindio.proyecto.entidades.*;
+import co.edu.uniquindio.proyecto.repositorios.ProductoRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.SubastaRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +88,27 @@ public class SubastaTest {
         lista.forEach(u -> System.out.println(u));
         System.out.println(lista);
     }
+
+    @Test
+    @Sql("classpath:subasta.sql")
+    public void listarPorFechaLimite() {
+
+        List<Subasta> lista = subastaRepositorio.findAllByFechaLimite("30/02/2022");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:subasta.sql")
+    public void listarPorProducto() {
+
+        //Hallamos el producto
+        Producto productoSubasta = productoRepositorio.findById(345).orElse(null);
+
+        List<Subasta> lista = subastaRepositorio.findAllByProductoSubasta(productoSubasta);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
 
 }

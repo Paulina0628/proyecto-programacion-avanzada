@@ -1,9 +1,10 @@
 package co.edu.uniquindio.proyecto.test;
 
-import co.edu.uniquindio.proyecto.Entidades.Chat;
-import co.edu.uniquindio.proyecto.Entidades.Mensaje;
-import co.edu.uniquindio.proyecto.Repositorios.ChatRepositorio;
-import co.edu.uniquindio.proyecto.Repositorios.MensajeRepositorio;
+import co.edu.uniquindio.proyecto.entidades.Chat;
+import co.edu.uniquindio.proyecto.entidades.Compra;
+import co.edu.uniquindio.proyecto.entidades.Mensaje;
+import co.edu.uniquindio.proyecto.repositorios.ChatRepositorio;
+import co.edu.uniquindio.proyecto.repositorios.MensajeRepositorio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,26 @@ public class MensajeTest {
 
     }
 
+    @Test
+    @Sql("classpath:mensajes.sql")
+    public void listarPorChat() {
 
+        //Buscamos el chat del mensaje
+        Chat chat = chatRepositorio.findById(0001).orElse(null);
+
+        List<Mensaje> lista = mensajeRepositorio.findAllByChat(chat);
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
+    @Test
+    @Sql("classpath:mensajes.sql")
+    public void listarPorEmisor() {
+
+
+
+        List<Mensaje> lista = mensajeRepositorio.findAllByEmisor("Andres");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
 }
