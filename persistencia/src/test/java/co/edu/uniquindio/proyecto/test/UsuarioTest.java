@@ -1,9 +1,13 @@
 package co.edu.uniquindio.proyecto.test;
 
+import co.edu.uniquindio.proyecto.dto.UsuarioYProducto;
 import co.edu.uniquindio.proyecto.entidades.Ciudad;
+import co.edu.uniquindio.proyecto.entidades.Comentario;
+import co.edu.uniquindio.proyecto.entidades.Producto;
 import co.edu.uniquindio.proyecto.entidades.Usuario;
 import co.edu.uniquindio.proyecto.repositorios.CiudadRepositorio;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
+import org.assertj.core.api.ObjectEnumerableAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.jdbc.Sql;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,4 +152,22 @@ public class UsuarioTest {
 
     }
 
+   @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarProductosFavoritosTest() {
+
+        List<Producto> lista = usuarioRepositorio.obtenerProductosFavoritos("felipe@email.com");
+        lista.forEach(System.out::println);
+        Assertions.assertEquals(lista.size(), 2);
+
+    }
+
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarUsuariosProductosTest() {
+
+        List<UsuarioYProducto> lista = usuarioRepositorio.listarUsuariosYProductos();
+        lista.forEach(System.out::println);
+
+    }
 }

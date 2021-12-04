@@ -10,6 +10,6 @@ INSERT INTO chat VALUES (0001, 1231, 1232);
 INSERT INTO chat VALUES (0002, 1232, 1233);
 INSERT INTO chat VALUES (0003, 1231, 1233);
 
-insert into mensaje values (2221, "Andres", "2022/01/12", "Hola, como se encuentra", 0001);
-insert into mensaje values (2222, "Geronimo", "2022/02/07", "Ok, no hay problema", 0002);
-insert into mensaje values (2223, "Miguel", "2022/03/14", "Pero, no tiene envío gratis?", 0003);
+insert into mensaje values (2221, "Andres", DATE("2022/01/12"), "Hola, como se encuentra", 0001);
+insert into mensaje values (2222, "Geronimo", DATE("2022/02/07"), "Ok, no hay problema", 0002);
+insert into mensaje values (2223, "Miguel", DATE("2022/03/14"), "Pero, no tiene envío gratis?", 0003);

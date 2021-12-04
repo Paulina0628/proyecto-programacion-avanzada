@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,9 +16,11 @@ public class Chat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
+    @ToString.Exclude
     private Integer codigo;
 
     @OneToMany(mappedBy = "chat")
+    @ToString.Exclude
     private List<Mensaje> mensajes;
 
     @ManyToOne

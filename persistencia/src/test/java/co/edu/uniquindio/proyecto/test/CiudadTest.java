@@ -91,4 +91,15 @@ public class CiudadTest {
 
     }
 
+    @Test
+    @Sql("classpath:usuarios.sql")
+    public void listarUsuariosPorCiudadTest() {
+
+        // Estás haciendo el test encima de la ciudades.sql, no de usuarios.sql
+
+        List<Usuario> lista = ciudadRepositorio.listarUsuarios("Armenia");
+        Assertions.assertEquals(lista.size(), 1);
+
+    }
+
 }

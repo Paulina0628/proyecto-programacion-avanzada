@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,6 +19,7 @@ public class Compra implements Serializable {
     private Integer codigo;
 
     @OneToMany(mappedBy = "compraDetalleCompra")
+    @ToString.Exclude
     private List<DetalleCompra> comprasDetalleCompras;
 
     @ManyToOne

@@ -1,9 +1,6 @@
 package co.edu.uniquindio.proyecto.entidades;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -26,6 +23,7 @@ public class Subasta implements Serializable {
     private Producto productoSubasta;
 
     @OneToMany(mappedBy = "subasta")
+    @ToString.Exclude
     private List<SubastaUsuario> usuarioSubastas;
 
     @Column(name = "fecha_limite", nullable = false)

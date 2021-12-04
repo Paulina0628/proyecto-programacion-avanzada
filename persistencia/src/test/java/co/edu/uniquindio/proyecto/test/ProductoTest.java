@@ -1,5 +1,6 @@
 package co.edu.uniquindio.proyecto.test;
 
+import co.edu.uniquindio.proyecto.dto.ProductoValido;
 import co.edu.uniquindio.proyecto.entidades.Ciudad;
 import co.edu.uniquindio.proyecto.entidades.Compra;
 import co.edu.uniquindio.proyecto.entidades.Producto;
@@ -7,6 +8,7 @@ import co.edu.uniquindio.proyecto.entidades.Usuario;
 import co.edu.uniquindio.proyecto.repositorios.CiudadRepositorio;
 import co.edu.uniquindio.proyecto.repositorios.ProductoRepositorio;
 import co.edu.uniquindio.proyecto.repositorios.UsuarioRepositorio;
+import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @DataJpaTest
@@ -40,7 +43,7 @@ public class ProductoTest {
             Usuario vendedor = usuarioRepositorio.findById(45321).orElse(null);
 
             // Creamos el producto a guardar
-            Producto producto = new Producto(ciudad, vendedor, 456, "Producto4", 14, "Este es el producto4", 4000, 18000, "2021/02/07");
+            Producto producto = new Producto(ciudad, vendedor, 456, "Producto4", 14, "Este es el producto4", 4000, 18000, LocalDateTime.of(2022, 12, 8, 0, 0));
 
             // Se guarda el producto creado
             Producto productoP = productoRepositorio.save(producto);
@@ -88,7 +91,7 @@ public class ProductoTest {
 
         @Test
         @Sql("classpath:productos.sql")
-        public void listar(){
+        public void listarTest(){
 
             // Conseguimos todos los productos
             List<Producto> productos = productoRepositorio.findAll();
@@ -101,7 +104,7 @@ public class ProductoTest {
 
     @Test
     @Sql("classpath:productos.sql")
-    public void listarPorPrecio() {
+    public void listarPorPrecioTest() {
 
         List<Producto> lista = productoRepositorio.findAllByPrecio(25000);
         Assertions.assertEquals(lista.size(), 1);
@@ -110,7 +113,7 @@ public class ProductoTest {
 
     @Test
     @Sql("classpath:productos.sql")
-    public void listarPorNombre() {
+    public void listarPorNombreTest() {
 
         List<Producto> lista = productoRepositorio.findAllByNombreContains("Producto1");
         Assertions.assertEquals(lista.size(), 1);
@@ -119,7 +122,7 @@ public class ProductoTest {
 
     @Test
     @Sql("classpath:productos.sql")
-    public void listarPorVendedor() {
+    public void listarPorVendedorTest() {
 
         // Hallamos el vendedor por su id
         Usuario vendedor = usuarioRepositorio.findById(45321).orElse(null);
@@ -131,14 +134,45 @@ public class ProductoTest {
 
     @Test
     @Sql("classpath:productos.sql")
-    public void listarPorVendedor() {
+    public void listarPorCiudadTest() {
 
-        // Hallamos la ciudad por su id
-        Ciudad ciudad = ciudadRepositorio.findById(4).orElse(null);
-
-        List<Producto> lista = productoRepositorio.findAllByCiudad(ciudad);
+        List<Producto> lista = productoRepositorio.findAllByCiudad("Armenia");
         Assertions.assertEquals(lista.size(), 1);
 
     }
 
+    @Test
+    @Sql("classpath:productos.sql")
+    public void obtenerNombreVendedorTest() {
+
+        String nombre = productoRepositorio.obtenerNombreVendedor(123);
+        Assertions.assertEquals("Alejandra", nombre);
     }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosyComentariosTest() {
+        List<Object[]> respuesta = productoRepositorio.listarProductosYComentarios();
+        respuesta.forEach(objects -> System.out.println(objects[0] +"----"+ objects[1]));
+        Assertions.assertEquals(3,3);
+                    
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarUsuariosComentariosTest() {
+        List<Usuario> usuarios = productoRepositorio.listarUsuariosComentarios(1);
+        usuarios.forEach(System.out::println);
+
+    }
+
+    @Test
+    @Sql("classpath:productos.sql")
+    public void listarProductosValidosTest() {
+
+        List<ProductoValido> productos = productoRepositorio.listarProductosValidos(LocalDateTime.now());
+        productos.forEach(System.out::println);
+        //Assertions.assertEquals(3, productos.size());
+    }
+
+}

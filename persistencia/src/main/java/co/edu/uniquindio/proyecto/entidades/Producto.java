@@ -1,13 +1,12 @@
 package co.edu.uniquindio.proyecto.entidades;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.validator.internal.util.privilegedactions.LoadClass;
 
 import javax.persistence.*;
 
@@ -25,12 +24,15 @@ public class Producto implements Serializable {
     private List<Usuario> usuarios;
 
     @OneToMany(mappedBy = "productoSubasta")
+    @ToString.Exclude
     private List<Subasta> subastas;
 
     @OneToMany(mappedBy = "productoDetalleCompra")
+    @ToString.Exclude
     private List<DetalleCompra> detalleCompras;
 
     @OneToMany(mappedBy = "productoChat")
+    @ToString.Exclude
     private List<Chat> chats;
 
     @ManyToOne
@@ -38,6 +40,7 @@ public class Producto implements Serializable {
     private Ciudad ciudad;
 
     @OneToMany(mappedBy = "productoComentado")
+    @ToString.Exclude
     private List<Comentario> comentarios;
 
     @ManyToOne
@@ -66,11 +69,11 @@ public class Producto implements Serializable {
     private double precio;
 
     @Column(name = "fecha_limite", nullable = false)
-    private String fechaLimite;
+    private LocalDateTime fechaLimite;
 
 
 
-    public Producto(String nombre, Integer unidades, String descripcion, double precio, String fechaLimite, double descuento) {
+    public Producto(String nombre, Integer unidades, String descripcion, double precio, LocalDateTime fechaLimite, double descuento) {
         this.nombre = nombre;
         this.unidades = unidades;
         this.descripcion = descripcion;
@@ -79,7 +82,7 @@ public class Producto implements Serializable {
         this.descuento = descuento;
     }
 
-    public Producto(Ciudad ciudad, Usuario vendedor, Integer codigo, String nombre, Integer unidades, String descripcion, double descuento, double precio, String fechaLimite) {
+    public Producto(Ciudad ciudad, Usuario vendedor, Integer codigo, String nombre, Integer unidades, String descripcion, double descuento, double precio, LocalDateTime fechaLimite) {
         this.ciudad = ciudad;
         this.vendedor = vendedor;
         this.codigo = codigo;
